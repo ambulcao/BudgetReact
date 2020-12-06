@@ -18,9 +18,14 @@ mongoose.connect('mongodb://localhost/budget', {
 });
 
 app.post('/budget', async  (req, res) => {
-    console.log(req.body);
-    res.send('Budget AMB Tech Solutions')
-}) 
+    await Budget.create(req.body, (err) => {
+        if(err) return res.status(400).json({
+            error: true,
+            message: "Erro: solicitação de orçamento não enviado com sucesso!"
+        });
+    });
+    {/*res.send('Budget AMB Tech Solutions');*/}
+}); 
 
 app.listen(8080, () => {
     console.log("Servidor iniciado na porta 8080: http://localhost:8080");

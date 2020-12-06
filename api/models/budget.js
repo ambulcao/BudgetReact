@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const budget = new Schema({
@@ -21,4 +21,4 @@ const budget = new Schema({
       timestamps: true,
   });
 
-  mongoose.model('Budget', budget);
+  mongoose.model('budget', budget);
