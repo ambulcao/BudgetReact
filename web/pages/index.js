@@ -16,9 +16,63 @@ import {
   Label,
   Input,
   Button,
+  Alert,
 } from "reactstrap";
 
 function HomePage() {
+  
+  const [budget, setBudget] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    whatsApp: '',
+    msg: '',
+  });
+
+  const [response, setResponse] = useState({
+    formSave: false,
+    type: '',
+    message: '',
+  });
+
+  const onChangeInput = e => setBudget({ ...budget, [e.target.name]: e.target.value});
+
+  const sendBudget = async e => {
+    e.preventDefault();
+    setResponse({formSave: true});
+    
+    try{
+      const res = await fetch('http://localhost:8080/budget', {
+        method: 'POST',
+        body: JSON.stringify(budget), 
+        headers: {'Content-Type': 'application/json'}
+      });
+      
+      const responseEnv = await res.json();
+
+      //console.log(responseEnv.error);
+      if(responseEnv.error){
+        formSave: false,
+        setResponse({
+          type: 'error',
+          message: responseEnv.message
+        });
+      } else {
+        formSave: false,
+        setResponse({
+          type: 'success',
+          message: responseEnv.message
+        });
+      }
+    } catch (err){
+      formSave: false,
+      setResponse({
+        type: 'error',
+        message: "Erro: Solicitação de orçamento não enviado com sucesso, tente mais tarde!"
+      });
+    }
+  }
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
@@ -58,7 +112,10 @@ function HomePage() {
             específica para sua necessidade.
           </p>
 
-          <Form>
+          {response.type === 'error' ? <Alert color="danger">{response.message}</Alert> : ""}
+          {response.type === 'success' ? <Alert color="success">{response.message}</Alert> : ""}
+
+          <Form onSubmit={sendBudget}>
             <Row form>
               <Col md={6}>
                 <FormGroup>
@@ -68,6 +125,7 @@ function HomePage() {
                     name="name"
                     id="name"
                     placeholder="Preencha com seu nome"
+                    onChange={onChangeInput}
                   />
                 </FormGroup>
               </Col>
@@ -79,6 +137,7 @@ function HomePage() {
                     name="email"
                     id="email"
                     placeholder="Informe seu E-mail"
+                    onChange={onChangeInput}
                   />
                 </FormGroup>
               </Col>
@@ -92,6 +151,7 @@ function HomePage() {
                     name="phone"
                     id="phone"
                     placeholder="Telefone para contato"
+                    onChange={onChangeInput}
                   />
                 </FormGroup>
               </Col>
@@ -103,16 +163,39 @@ function HomePage() {
                     name="whatsApp"
                     id="whatsApp"
                     placeholder="(99) 9999-9999"
+                    onChange={onChangeInput}
                   />
                 </FormGroup>
               </Col>
             </Row>
-            <FormGroup>
-              <Label for="msg">Deixe sua Mensagem</Label>
-              <Input type="textarea" name="msg" id="msg" placeholder="Fale um pouco do seu projeto..."/>
-            </FormGroup>
-            <Button type="submit" outline color="info" >Enviar</Button>
+              <FormGroup>
+                <Label for="msg">Deixe sua Mensagem</Label>
+                <Input 
+                  type="textarea" 
+                  name="msg" 
+                  id="msg" 
+                  placeholder="Fale um pouco do seu projeto..."
+                  onChange={onChangeInput}  
+                />
+              </FormGroup>
+
+            {response.formSave ? <Button type="submit" outline color="info" disabled>Enviando...</Button> : <Button type="submit" outline color="info" >Enviar</Button> }
+            
           </Form>
+        </Container>
+      </Jumbotron>
+
+      <Jumbotron fluid className="rodape bg-info">
+        <sytle>
+          {/*{`.rodape{
+            color: #fff;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            margin-bottom: 0rem !important;
+          }`}*/}
+        </sytle>
+        <Container>
+          <h1 className="lead text-center">BUD Tech Consultoria</h1>
         </Container>
       </Jumbotron>
     </div>
