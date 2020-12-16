@@ -98,8 +98,8 @@ function HomePage() {
           {`.pg-budget{
               background-color: #f5fbfa;
               color: #17a2b8;
-              padding-top: auto;
-              padding-bottom: auto;
+              padding-top: 150px;
+              padding-bottom: 165px;
               margin-bottom: 0rem !important;
           }`}
         </style>
@@ -186,14 +186,14 @@ function HomePage() {
       </Jumbotron>
 
       <Jumbotron fluid className="rodape bg-info">
-        <sytle>
-          {/*{`.rodape{
-            color: #fff;
-            padding-top: 10px;
-            padding-bottom: 10px;
-            margin-bottom: 0rem !important;
-          }`}*/}
-        </sytle>
+        <style>
+          {`.rodape{
+              color: #fff;
+              padding-top: auto;
+              padding-bottom: auto;
+              margin-bottom: 0rem !important;
+          }`}
+        </style>
         <Container>
           <h1 className="lead text-center">BUD Tech Consultoria</h1>
         </Container>
